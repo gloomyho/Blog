@@ -1,0 +1,10 @@
+extends layout.pug
+
+block content
+  textarea#(name="title", cols="30", rows="1", value=entry.title)
+  textarea#(name="text", cols="30", rows="10", value=entry.text)
+  br
+  form(action=`/blogentry/${entry.id}/edit?_method=PUT`, method="post")
+    button(type="submit") Edit
+  form(action=`/blogentry/${entry.id}`)
+    button(type="button") Cancel

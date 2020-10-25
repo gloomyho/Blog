@@ -1,0 +1,14 @@
+html
+  head
+    link(rel="stylesheet", href="/css/style.css")
+    title My Blog
+  body
+    block header
+      include header.pug
+    br
+    block content
+      p default content
+    br
+    footer
+      block footer 
+        include footer.pug

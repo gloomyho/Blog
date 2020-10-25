@@ -1,0 +1,14 @@
+extends layout.pug
+
+block content
+  each entry in blogentries
+    div(class="entryContainer")
+      a(href=`/blogentry/${entry.id}` class="clickableContainer")
+      p=entry.title
+      p=entry.text
+      p=entry.user
+      p=entry.date
+
+block footer
+  include pagination.pug
+
