@@ -2,8 +2,11 @@ extends layout.pug
 
 block content
   form(action="newEntry", method="post")
-    input(type="text", name="title", placeholder="Title")
-    br
-    input(type="text", name="text", placeholder="Text here...")
-    br
-    input(type="submit" value="Create")
+    div
+      input(type="text", name="title", placeholder="Title")
+      input(type="text", name="text", placeholder="Text here...")
+    div
+      input(type="submit" value="Create")
+    div
+      input(type="file", name="image", class="filepond")
+    

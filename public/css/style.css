@@ -9,3 +9,14 @@ a.clickableContainer{
   width: 100%;
   height: 100%;
 }
+ul.paginationList{
+  display: table;
+  width: 100%;
+  text-align: center;
+}
+ul.paginationList > li {
+  display: table-cell;
+}
+div.btnDiv{
+  display: flex;
+}

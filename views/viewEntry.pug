@@ -1,10 +1,10 @@
 extends layout.pug
 
 block content
-  p=entry.title
-  p=entry.text
+  include entry.pug
   br
-  a(href=`/blogentry/${entry.id}/edit`)
-    button(type="button") Edit
-  form(action=`/blogentry/${entry.id}/?_method=DELETE`, method="post")
-    button(type="submit") Delete
+  div(class="btnDiv")
+    a(href=`/blogentry/${entry.id}/edit`)
+      button(type="button") Edit
+    form(action=`/blogentry/${entry.id}/?_method=DELETE`, method="post")
+      button(type="submit") Delete

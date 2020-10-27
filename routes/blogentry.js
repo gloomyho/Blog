@@ -1,27 +1,32 @@
 const express = require('express')
 const router = express.Router()
 const BlogEntry = require('../models/blogentry')
+const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif']
 
 router.get('/', (req, res) => {
 })
-
-
 
 //render make new entry page
 router.get('/newEntry', (req, res) => {
   res.render('newEntry')
 })
+
 //make new blog entry
-router.post('/newEntry', async(req, res) => {
+router.post('/newEntry', async(req, res) => {  
   const entry = new BlogEntry({
     title: req.body.title,
-    text: req.body.text,
+    text: req.body.text
   })
-  try {
+  if(req.body.image.data != null){
+    saveImage(entry, req.body.image)
+  }  
+  try {    
     const newEntry = await entry.save()
     res.redirect(`/blogentry/${newEntry.id}`)
   } catch (error) {
-    console.log(error)
+    res.render('error', {
+      error: error
+    })
   } 
 })
 
@@ -33,40 +38,37 @@ router.get('/:id', async(req, res) => {
       entry: entry
     })
   } catch (error) {
-    console.log(error)
-    res.redirect('/')
+    res.render('error', {
+      error: error
+    })
   }
 })
 
 //render edit page
-router.get('/:id/edit', (req, res) => {
-  const entry = BlogEntry.findById(req.params.id)
-  res.render('editEntry', {
-    entry: entry
-  })
+router.get('/:id/edit', async (req, res) => {
+  const entry = await BlogEntry.findById(req.params.id)
+  try {
+    res.render('editEntry', {
+      entry: entry
+    })
+  } catch (error) {
+    res.render('error', {
+      error: error
+    })
+  }  
 })
 //update entry
 router.put('/:id', async (req,res) => {
-  let book
+  const entry = await BlogEntry.findById(req.params.id)
   try {
-    book = await Book.findById(req.params.id)
-    book.title = req.body.title
-    book.author = req.body.author
-    book.publishDate = new Date(req.body.publishDate)
-    book.pageCount = req.body.pageCount
-    book.description = req.body.description
-    if(req.body.cover != null && req.body.cover !== '') {
-      saveCover(book, req.body.cover)
-    }
-    await book.save()
-    res.redirect(`/books/${book.id}`)
+    entry.title = req.body.title
+    entry.text = req.body.text
+    await entry.save()
+    res.redirect(`/blogentry/${entry.id}`)
   } catch (error) {
-    if(book != null) {
-      renderEdit(res, book, true)
-    }  
-    else {
-      redirect('/')
-    }
+    res.render('error', {
+      error: error
+    })
   }
 })
 //delete blog entry
@@ -91,5 +93,16 @@ router.delete('/:id', async (req, res)=> {
     }
 }
 })
+
+function saveImage(entry, imageEncoded) {
+  console.log(imageEncoded != null)
+  if(imageEncoded != null) {
+    const tmpEntry = JSON.parse(imageEncoded)
+    if(tmpEntry != null && imageMimeTypes.includes(tmpEntry.type)) {
+      entry.image = new Buffer.from(tmpEntry.data, 'base64')
+      entry.imageType = tmpEntry.type
+    }
+  }
+}
 
 module.exports = router

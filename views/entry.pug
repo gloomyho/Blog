@@ -1,0 +1,7 @@
+div(class="entryContainer")
+      a(href=`/blogentry/${entry.id}` class="clickableContainer")
+      p=entry.title
+      p=entry.text
+      img.image(src=`${entry.imagePath}`)
+      p=entry.user
+      p=entry.date
